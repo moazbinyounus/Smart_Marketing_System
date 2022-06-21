@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "935816783694",
+    "project_id": "smartmarketingsystem-17613",
+    "storage_bucket": "smartmarketingsystem-17613.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935816783694:android:59b9642df837075949a01f",
+        "android_client_info": {
+          "package_name": "com.mby.smart_marketing_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "935816783694-rp8l4t0c248jcf690d6hrldqqs4udt01.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgJMP_IkNWAccPEycUPWbdFreMdYXyrh0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "935816783694-rp8l4t0c248jcf690d6hrldqqs4udt01.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
