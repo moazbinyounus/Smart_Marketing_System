@@ -4,11 +4,13 @@ import 'dart:convert';
 import '../Controller.dart';
 import '../models/DialogWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as c;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import '../screen/homaScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
+
 class CardOrderReceived extends StatefulWidget {
   double total;
   CardOrderReceived(this.total);
@@ -18,7 +20,7 @@ class CardOrderReceived extends StatefulWidget {
 
 class _CardOrderReceivedState extends State<CardOrderReceived> {
   String? id;
-  final now=DateTime.now();
+  final now = DateTime.now();
   String riderId = '';
   bool status = false;
   final Details ctrl = Get.find();
@@ -30,9 +32,9 @@ class _CardOrderReceivedState extends State<CardOrderReceived> {
         .limit(1)
         .get()
         .then(
-          (QuerySnapshot querySnapshot) {
+      (QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach(
-              (doc) {
+          (doc) {
             if (doc.exists) {
               setState(() {
                 riderId = doc.get('riderId');
@@ -46,11 +48,9 @@ class _CardOrderReceivedState extends State<CardOrderReceived> {
       },
     );
   }
-  void uniqueId(){
-    id = FirebaseFirestore.instance
-        .collection('Products')
-        .doc()
-        .id;
+
+  void uniqueId() {
+    id = FirebaseFirestore.instance.collection('Products').doc().id;
   }
 
   @override
@@ -59,179 +59,183 @@ class _CardOrderReceivedState extends State<CardOrderReceived> {
     super.initState();
     getRider();
   }
+
   Map<String, dynamic>? paymentIntentData;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // TextButton(onPressed: ()async=>await makePayment(widget.total.toString()),
-            //     child: Text('Pay',
-            //     style: TextStyle(
-            //       color: Colors.deepPurpleAccent
-            //     ),)
-            // ),
-            // InkWell(
-            //   onTap: ()async{
-            //     await makePayment(widget.total.toString());
-            //   },
-            //   child: Container(
-            //     height: 50,
-            //     width: 200,
-            //     color: Colors.green,
-            //     child: Center(
-            //       child: Text('Pay' , style: TextStyle(color: Colors.white , fontSize: 20),),
-            //     ),
-            //   ),
-            // ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/app_bg.jpeg'),
+                fit: BoxFit.cover)),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () async {
+                  if (status == true) {
+                    uniqueId();
 
-            TextButton(
-              onPressed: () async{
+                    try {
+                      //spinner = true;
+                      await FirebaseFirestore.instance
+                          .collection('Orders')
+                          .doc(id)
+                          .set({
+                        'orderId': id,
+                        'ridersId': riderId,
+                        'clientEmail': (ctrl.email),
+                        'paymentMethode': 'Paid',
+                        'price': widget.total.toString(),
+                        'orderStatus': 'inProcess',
+                        'time': now,
+                      });
+                    } catch (e) {
+                      showDialog(
+                          context: context,
+                          builder: (_) => DialogWidget('Network Error'));
+                      print(e);
+                    }
+                    try {
+                      //spinner = true;
+                      await FirebaseFirestore.instance
+                          .collection('RiderStatus')
+                          .doc(riderId)
+                          .set({
+                        'riderId': riderId,
+                        'status': false,
+                      });
+                      await makePayment(widget.total.toString());
+                    } catch (e) {
+                      showDialog(
+                          context: context,
+                          builder: (_) => DialogWidget('Network Error'));
+                      print(e);
+                    }
+                    //makePayment(widget.total.toString());
 
-                if (status == true) {
-                  uniqueId();
-
-
-                  try {
-                    //spinner = true;
-                    await FirebaseFirestore.instance
-                        .collection('Orders')
-                        .doc(id)
-                        .set({
-                      'orderId': id,
-                      'ridersId': riderId,
-                      'clientEmail': (ctrl.email),
-                      'paymentMethode': 'Paid',
-                      'price':widget.total.toString(),
-                      'orderStatus':'inProcess',
-                      'time': now,
-                    });
-
-
-                  } catch (e) {
+                  } else {
                     showDialog(
-                        context: context,
-                        builder: (_) => DialogWidget(
-                            'Network Error'));
-                    print(e);
+                      context: context,
+                      builder: (_) => DialogWidget('No Rider Found'),
+                    );
                   }
-                  try {
-                    //spinner = true;
-                    await FirebaseFirestore.instance
-                        .collection('RiderStatus')
-                        .doc(riderId)
-                        .set({
-                      'riderId': riderId,
-                      'status': false,
+                },
+                child: c.Card(
+                  color: Color(0xff6f3096),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width/2,
+                    height: MediaQuery.of(context).size.height/9,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
 
-                    });
-                    await makePayment(widget.total.toString());
-
-
-
-                  } catch (e) {
-                    showDialog(
-                        context: context,
-                        builder: (_) => DialogWidget(
-                            'Network Error'));
-                    print(e);
-                  }
-                  //makePayment(widget.total.toString());
-
-
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (_) => DialogWidget('No Rider Found'),
-                  );
-                }
-              },
-              child: Text(
-                'Confirm Order',
-                style: TextStyle(
-                    color: Colors.purple
+                      children:[
+                        Icon(Icons.check, color: Colors.white,),
+                        Text(
+                        ' Confirm Order',
+                        style: TextStyle(color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),]
+                    ),
+                  ),
                 ),
               ),
-            ),
-            TextButton(onPressed: ()=> Get.to(HomeScreen()), child: Text(
-              'Continue Shopping !'
-              ,
-              style: TextStyle(
-                  color: Colors.purple
-              ),
-            ))
-          ],
+              TextButton(
+                  onPressed: () => Get.to(HomeScreen()),
+                  child: c.Card(
+                    color: Color(0xff06114f),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width/2,
+                      height: MediaQuery.of(context).size.height/12,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Continue Shopping',
+                            style: TextStyle(color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                          Icon(Icons.arrow_forward,color: Colors.white,)
+                        ],
+                      ),
+                    )
+                  ))
+            ],
+          ),
         ),
       ),
     );
   }
+
   Future<void> makePayment(String amount) async {
-
     try {
-
-      paymentIntentData =
-      await createPaymentIntent(amount, 'USD'); //json.decode(response.body);
+      paymentIntentData = await createPaymentIntent(
+          amount, 'USD'); //json.decode(response.body);
       // print('Response body==>${response.body.toString()}');
-      await Stripe.instance.initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
-              paymentIntentClientSecret: paymentIntentData!['client_secret'],
-              applePay: true,
-              googlePay: true,
-              testEnv: true,
-              style: ThemeMode.dark,
-              merchantCountryCode: 'US',
-              merchantDisplayName: 'ANNIE')).then((value){
-      });
-
+      await Stripe.instance
+          .initPaymentSheet(
+              paymentSheetParameters: SetupPaymentSheetParameters(
+                  paymentIntentClientSecret:
+                      paymentIntentData!['client_secret'],
+                  applePay: true,
+                  googlePay: true,
+                  testEnv: true,
+                  style: ThemeMode.dark,
+                  merchantCountryCode: 'US',
+                  merchantDisplayName: 'ANNIE'))
+          .then((value) {});
 
       ///now finally display payment sheeet
 
       displayPaymentSheet();
-
     } catch (e, s) {
       print('exception:$e$s');
     }
   }
 
   displayPaymentSheet() async {
-
     try {
-      await Stripe.instance.presentPaymentSheet(
-          parameters: PresentPaymentSheetParameters(
-            clientSecret: paymentIntentData!['client_secret'],
-            confirmPayment: true,
-          )).then((newValue){
-
-
-        print('payment intent'+paymentIntentData!['id'].toString());
-        print('payment intent'+paymentIntentData!['client_secret'].toString());
-        print('payment intent'+paymentIntentData!['amount'].toString());
-        print('payment intent'+paymentIntentData.toString());
+      await Stripe.instance
+          .presentPaymentSheet(
+              parameters: PresentPaymentSheetParameters(
+        clientSecret: paymentIntentData!['client_secret'],
+        confirmPayment: true,
+      ))
+          .then((newValue) {
+        print('payment intent' + paymentIntentData!['id'].toString());
+        print(
+            'payment intent' + paymentIntentData!['client_secret'].toString());
+        print('payment intent' + paymentIntentData!['amount'].toString());
+        print('payment intent' + paymentIntentData.toString());
         //orderPlaceApi(paymentIntentData!['id'].toString());
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("paid successfully")));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("paid successfully")));
 
         paymentIntentData = null;
-        print('blrtshlistroiwlsrtihlgsrihtlsrhilthglsirhtlshrlthrlshnlktnlk//////////////////////////');
+        print(
+            'blrtshlistroiwlsrtihlgsrihtlsrhilthglsirhtlshrlthrlshnlktnlk//////////////////////////');
         showDialog(
           context: context,
           builder: (_) => DialogWidget('Rider Found'),
         );
-
-      }).onError((error, stackTrace){
+      }).onError((error, stackTrace) {
         print('Exception/DISPLAYPAYMENTSHEET==> $error $stackTrace');
       });
-
-
     } on StripeException catch (e) {
       print('Exception/DISPLAYPAYMENTSHEET==> $e');
       showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            content: Text("Cancelled "),
-          ));
+                content: Text("Cancelled "),
+              ));
     } catch (e) {
       print('$e');
     }
@@ -251,7 +255,7 @@ class _CardOrderReceivedState extends State<CardOrderReceived> {
           body: body,
           headers: {
             'Authorization':
-            'Bearer sk_test_51L5upMFw4j8raCX9KTs4UrxADV8iCPTzOxcbML1DBBzMV2AJ0AvfC9X5Z22nwgd7s5oNkOppopWkY7JQxxQdUs1W00XbyNAVHs',
+                'Bearer sk_test_51L5upMFw4j8raCX9KTs4UrxADV8iCPTzOxcbML1DBBzMV2AJ0AvfC9X5Z22nwgd7s5oNkOppopWkY7JQxxQdUs1W00XbyNAVHs',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
       print('Create Intent reponse ===> ${response.body.toString()}');
@@ -262,9 +266,7 @@ class _CardOrderReceivedState extends State<CardOrderReceived> {
   }
 
   calculateAmount(String amount) {
-    final a = ((double.parse(amount).round()))  ;
+    final a = ((double.parse(amount).round()));
     return a.toString();
   }
-
-
 }

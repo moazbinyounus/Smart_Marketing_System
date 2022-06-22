@@ -351,8 +351,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                       'Garden', 'assets/images/garden.png'),
                                   CategoryTile(
                                       'Beauty', 'assets/images/beauty.png'),
+                                  CategoryTile(
+                                      'Medicine', 'assets/images/pillcat.png'),
                                 ],
-                              )
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CategoryTile(
+                                      'Toys', 'assets/images/toyCat.png'),
+                                  CategoryTile(
+                                      'Watch', 'assets/images/watchCat.png'),
+                                  CategoryTile(
+                                      'Gadgets', 'assets/images/acesCat.png'),
+
+                                  CategoryTile(
+                                      'Grocery', 'assets/images/groceryCat.png'),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CategoryTile(
+                                      'Phones', 'assets/images/phoneCat.png'),
+                                  CategoryTile(
+                                      'Furniture', 'assets/images/furnitureCat.png'),
+                                  CategoryTile(
+                                      'Food', 'assets/images/foodCat.png'),
+                                  CategoryTile(
+                                      'Other', 'assets/images/otherCat.png'),
+                                ],
+                              ),
                             ],
                           ),
                         )

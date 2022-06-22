@@ -103,6 +103,8 @@ flutter:
   - assets/images/storeClip.png
   - assets/images/product.png
   - assets/icons/
+  - assets/images/app_bg.jpeg
+  - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

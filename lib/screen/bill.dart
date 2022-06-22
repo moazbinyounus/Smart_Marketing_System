@@ -64,66 +64,103 @@ class _BillState extends State<Bill> {
       appBar: AppBar(
         title: const Text('Bill'),
       ),
-      body: Center(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height / 1.5,
-          width: MediaQuery.of(context).size.width / 1.5,
-          child: Card(
-            shape: RoundedRectangleBorder(
-              side: const BorderSide(color: Colors.black12, width: 1),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            color: Color(0xffbca0dc),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    'Order Summary',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Bill',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(widget.bill.toString()),
-                        ],
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/app_bg.jpeg'),
+                fit: BoxFit.cover)),
+        child: Center(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height / 1.5,
+            width: MediaQuery.of(context).size.width / 1.5,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.black12, width: 1),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              color: Color(0xff6f3096),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Text(
+                      'Order Summary',
+                      style: TextStyle(fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'W.H.T (%)',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(widget.wht.toString()),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Delivery',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(widget.delivery.toString()),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('Total:'),
-                      Text(widget.total.toString()),
-                    ],
-                  )
-                ],
+                    ),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Bill',
+                              style: TextStyle(fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                            ),
+                            Text(widget.bill.toString(),
+                            style: TextStyle(
+                              color: Colors.white
+                            ),),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'W.H.T (%)',
+                              style: TextStyle(fontSize: 15,
+                                  color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            Text(widget.wht.toString(),
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Delivery',
+                              style: TextStyle(fontSize: 15,
+                                  color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            Text(widget.delivery.toString(),
+                              style: TextStyle(
+                                color: Colors.white
+                            ),),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Total: ',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                        ),
+                        ),
+                        Text(widget.total.toString()+' PKR',
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

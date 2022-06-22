@@ -9,8 +9,8 @@ class CategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
-      width: 80,
+      height: MediaQuery.of(context).size.height/9,
+      width: MediaQuery.of(context).size.width/5,
       child: GestureDetector(
         onTap: (){
           Get.to(()=>AllProducts(name));
