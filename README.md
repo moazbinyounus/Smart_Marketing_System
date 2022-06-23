@@ -24,4 +24,4 @@ Platforms:
 - Admin Web App
 
 For Contact
-maozbinyounus@gmail.com
+moazbinyounus@gmail.com
