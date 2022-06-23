@@ -18,7 +18,7 @@ class LocationPicker extends StatefulWidget{
 class _LocationPickerState extends State<LocationPicker> {
   late double lat;
   late double lng;
-  String googleApikey = "GOOGLE_MAP_API_KEY";
+  //String googleApikey = "GOOGLE_MAP_API_KEY";
   GoogleMapController? mapController; //contrller for Google map
   CameraPosition? cameraPosition;
   LatLng startLocation = LatLng(33.5651, 73.0169);
