@@ -18,7 +18,6 @@ and import from abroad. Our system is designed for local markets and demands 0% 
 on different portals for different users.
 
 Platforms:
-
 - Customer, Salesman App
 - Rider App
 - Admin Web App
